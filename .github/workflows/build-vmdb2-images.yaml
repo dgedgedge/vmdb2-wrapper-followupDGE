@@ -33,17 +33,25 @@ jobs:
 
     - name: Build Cubietruck
       run: sudo vmdb2 cubietruck_buster_armhf_vmdb2-0.14.1.yaml --output cubietruck_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
+
+    - name: Compress image
+      run: gzip cubietruck_buster_armhf.img
+
     - uses: actions/upload-artifact@v1
       with:
-        name: cubietruck_buster_armhf.img
-        path: cubietruck_buster_armhf.img
+        name: cubietruck_buster_armhf.img.gz
+        path: cubietruck_buster_armhf.img.gz
 
     - name: Build Cubietruck_plus
       run: sudo vmdb2 cubietruck-plus_buster_armhf_vmdb2-0.14.1.yaml --output cubietruck-plus_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
+
+    - name: Compress image
+      run: gzip cubietruck-plus_buster_armhf.img
+
     - uses: actions/upload-artifact@v1
       with:
-        name: cubietruck-plus_buster_armhf.img
-        path: cubietruck-plus_buster_armhf.img
+        name: cubietruck-plus_buster_armhf.img.gz
+        path: cubietruck-plus_buster_armhf.img.gz
 
   buster_arm64:
     # The type of runner that the job will run on
@@ -65,10 +73,14 @@ jobs:
 
     - name: Build Rock64
       run: sudo vmdb2 rock64_buster_arm64_vmdb2-0.14.1.yaml --output rock64_buster_arm64.img --rootfs-tarball buster_arm64_rootfs.tgz --log=stderr
+
+    - name: Compress image
+      run: gzip rock64_buster_arm64.img
+
     - uses: actions/upload-artifact@v1
       with:
-        name: rock64_buster_arm64.img
-        path: rock64_buster_arm64.img
+        name: rock64_buster_arm64.img.gz
+        path: rock64_buster_arm64.img.gz
 
   bullseye_arm64:
     # The type of runner that the job will run on
@@ -90,7 +102,11 @@ jobs:
 
     - name: Build Rock64
       run: sudo vmdb2 rock64_bullseye_arm64_vmdb2-0.14.1.yaml --output rock64_bullseye_arm64.img --rootfs-tarball bullseye_arm64_rootfs.tgz --log=stderr
+
+    - name: Compress image
+      run: gzip rock64_bullseye_arm64.img
+
     - uses: actions/upload-artifact@v1
       with:
-        name: rock64_bullseye_arm64.img
-        path: rock64_bullseye_arm64.img
+        name: rock64_bullseye_arm64.img.gz
+        path: rock64_bullseye_arm64.img.gz
