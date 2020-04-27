@@ -35,7 +35,7 @@ jobs:
       run: sudo vmdb2 cubietruck_buster_armhf_vmdb2-0.14.1.yaml --output cubietruck_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
 
     - name: Zero-ing obsolete data blocks
-      run: sudo kpartx -asv cubietruck_buster_armhf.img; sudo zerofree /dev/mapper/loop0p1; sudo kpartx -dsv cubietruck_buster_armhf.img
+      run: loopN=$(sudo kpartx -asv cubietruck_buster_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv cubietruck_buster_armhf.img
 
     - name: Compress image
       run: gzip cubietruck_buster_armhf.img
@@ -49,7 +49,7 @@ jobs:
       run: sudo vmdb2 cubietruck-plus_buster_armhf_vmdb2-0.14.1.yaml --output cubietruck-plus_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
 
     - name: Zero-ing obsolete data blocks
-      run: sudo kpartx -asv cubietruck-plus_buster_armhf.img; sudo zerofree /dev/mapper/loop0p1; sudo kpartx -dsv cubietruck_buster_armhf.img
+      run: loopN=$(sudo kpartx -asv cubietruck-plus_buster_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv cubietruck-plus_buster_armhf.img
 
     - name: Compress image
       run: gzip cubietruck-plus_buster_armhf.img
@@ -81,7 +81,7 @@ jobs:
       run: sudo vmdb2 rock64_buster_arm64_vmdb2-0.14.1.yaml --output rock64_buster_arm64.img --rootfs-tarball buster_arm64_rootfs.tgz --log=stderr
 
     - name: Zero-ing obsolete data blocks
-      run: sudo kpartx -asv rock64_buster_armhf.img; sudo zerofree /dev/mapper/loop0p1; sudo kpartx -dsv cubietruck_buster_armhf.img
+      run: loopN=$(sudo kpartx -asv rock64_buster_arm64.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv rock64_buster_arm64.img
 
     - name: Compress image
       run: gzip rock64_buster_arm64.img
@@ -113,7 +113,7 @@ jobs:
       run: sudo vmdb2 cubietruck-plus_bullseye_armhf_vmdb2-0.14.1.yaml --output cubietruck-plus_bullseye_armhf.img --rootfs-tarball bullseye_armhf_rootfs.tgz --log=stderr
 
     - name: Zero-ing obsolete data blocks
-      run: sudo kpartx -asv cubietruck-plus_bullseye_armhf.img; sudo zerofree /dev/mapper/loop0p1; sudo kpartx -dsv cubietruck_buster_armhf.img
+      run: loopN=$(sudo kpartx -asv cubietruck-plus_bullseye_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv cubietruck-plus_bullseye_armhf.img
 
     - name: Compress image
       run: gzip cubietruck-plus_bullseye_armhf.img
