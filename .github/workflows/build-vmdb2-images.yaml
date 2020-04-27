@@ -45,7 +45,7 @@ jobs:
         name: cubietruck_buster_armhf.img.gz
         path: cubietruck_buster_armhf.img.gz
 
-    - name: Build Cubietruck_plus
+    - name: Build Cubietruck Plus
       run: sudo vmdb2 cubietruck-plus_buster_armhf_vmdb2-0.14.1.yaml --output cubietruck-plus_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
 
     - name: Zero-ing obsolete data blocks
@@ -58,6 +58,20 @@ jobs:
       with:
         name: cubietruck-plus_buster_armhf.img.gz
         path: cubietruck-plus_buster_armhf.img.gz
+
+    - name: Build OrangePi R1
+      run: sudo vmdb2 orangepi-r1_buster_armhf_vmdb2-0.14.1.yaml --output orangepi-r1_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
+
+    - name: Zero-ing obsolete data blocks
+      run: loopN=$(sudo kpartx -asv orangepi-r1_buster_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv orangepi-r1_buster_armhf.img
+
+    - name: Compress image
+      run: gzip orangepi-r1_buster_armhf.img
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: orangepi-r1_buster_armhf.img.gz
+        path: orangepi-r1_buster_armhf.img.gz
 
   buster_arm64:
     # The type of runner that the job will run on
