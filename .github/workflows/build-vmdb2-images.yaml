@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Build images
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -24,7 +24,7 @@ jobs:
 
     # Runs a set of commands using the runners shell
     - name: Install needed packagest
-      run: sudo apt install python3-cliapp cmdtest debootstrap qemu-utils kpartx qemu-user-static binfmt-support
+      run: sudo apt install python3-cliapp cmdtest debootstrap qemu-utils kpartx qemu-user-static binfmt-support zerofree
 
     - name: Install vmdb2
       run: |
@@ -33,6 +33,9 @@ jobs:
 
     - name: Build Cubietruck
       run: sudo vmdb2 cubietruck_buster_armhf_vmdb2-0.14.1.yaml --output cubietruck_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
+
+    - name: Zero-ing obsolete data blocks
+      run: sudo kpartx -asv cubietruck_buster_armhf.img; sudo zerofree /dev/mapper/loop0p1; sudo kpartx -dsv cubietruck_buster_armhf.img
 
     - name: Compress image
       run: gzip cubietruck_buster_armhf.img
@@ -44,6 +47,9 @@ jobs:
 
     - name: Build Cubietruck_plus
       run: sudo vmdb2 cubietruck-plus_buster_armhf_vmdb2-0.14.1.yaml --output cubietruck-plus_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
+
+    - name: Zero-ing obsolete data blocks
+      run: sudo kpartx -asv cubietruck-plus_buster_armhf.img; sudo zerofree /dev/mapper/loop0p1; sudo kpartx -dsv cubietruck_buster_armhf.img
 
     - name: Compress image
       run: gzip cubietruck-plus_buster_armhf.img
@@ -64,7 +70,7 @@ jobs:
 
     # Runs a set of commands using the runners shell
     - name: Install needed packagest
-      run: sudo apt install python3-cliapp cmdtest debootstrap qemu-utils kpartx qemu-user-static binfmt-support
+      run: sudo apt install python3-cliapp cmdtest debootstrap qemu-utils kpartx qemu-user-static binfmt-support zerofree
 
     - name: Install vmdb2
       run: |
@@ -73,6 +79,9 @@ jobs:
 
     - name: Build Rock64
       run: sudo vmdb2 rock64_buster_arm64_vmdb2-0.14.1.yaml --output rock64_buster_arm64.img --rootfs-tarball buster_arm64_rootfs.tgz --log=stderr
+
+    - name: Zero-ing obsolete data blocks
+      run: sudo kpartx -asv rock64_buster_armhf.img; sudo zerofree /dev/mapper/loop0p1; sudo kpartx -dsv cubietruck_buster_armhf.img
 
     - name: Compress image
       run: gzip rock64_buster_arm64.img
@@ -102,6 +111,9 @@ jobs:
 
     - name: Build Cubietruck Plus
       run: sudo vmdb2 cubietruck-plus_bullseye_armhf_vmdb2-0.14.1.yaml --output cubietruck-plus_bullseye_armhf.img --rootfs-tarball bullseye_armhf_rootfs.tgz --log=stderr
+
+    - name: Zero-ing obsolete data blocks
+      run: sudo kpartx -asv cubietruck-plus_bullseye_armhf.img; sudo zerofree /dev/mapper/loop0p1; sudo kpartx -dsv cubietruck_buster_armhf.img
 
     - name: Compress image
       run: gzip cubietruck-plus_bullseye_armhf.img
