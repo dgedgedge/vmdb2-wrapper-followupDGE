@@ -39,7 +39,7 @@ jobs:
       run: loopN=$(sudo kpartx -asv cubietruck_buster_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv cubietruck_buster_armhf.img
 
     - name: Compress image
-      run: lbzip2 cubietruck_buster_armhf.img
+      run: sudo lbzip2 cubietruck_buster_armhf.img
 
     - uses: actions/upload-artifact@v1
       with:
@@ -53,7 +53,7 @@ jobs:
       run: loopN=$(sudo kpartx -asv cubietruck-plus_buster_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv cubietruck-plus_buster_armhf.img
 
     - name: Compress image
-      run: lbzip2 cubietruck-plus_buster_armhf.img
+      run: sudo lbzip2 cubietruck-plus_buster_armhf.img
 
     - uses: actions/upload-artifact@v1
       with:
@@ -67,7 +67,7 @@ jobs:
       run: loopN=$(sudo kpartx -asv orangepi-r1_buster_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv orangepi-r1_buster_armhf.img
 
     - name: Compress image
-      run: lbzip2 orangepi-r1_buster_armhf.img
+      run: sudo lbzip2 orangepi-r1_buster_armhf.img
 
     - uses: actions/upload-artifact@v1
       with:
@@ -99,7 +99,7 @@ jobs:
       run: loopN=$(sudo kpartx -asv rock64_buster_arm64.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv rock64_buster_arm64.img
 
     - name: Compress image
-      run: lbzip2 rock64_buster_arm64.img
+      run: sudo lbzip2 rock64_buster_arm64.img
 
     - uses: actions/upload-artifact@v1
       with:
@@ -131,7 +131,7 @@ jobs:
       run: loopN=$(sudo kpartx -asv cubietruck-plus_bullseye_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv cubietruck-plus_bullseye_armhf.img
 
     - name: Compress image
-      run: lbzip2 cubietruck-plus_bullseye_armhf.img
+      run: sudo lbzip2 cubietruck-plus_bullseye_armhf.img
 
     - uses: actions/upload-artifact@v1
       with:
