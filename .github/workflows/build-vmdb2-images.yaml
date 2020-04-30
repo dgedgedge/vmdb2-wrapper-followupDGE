@@ -74,6 +74,20 @@ jobs:
         name: orangepi-r1_buster_armhf.img.bz2
         path: orangepi-r1_buster_armhf.img.bz2
 
+    - name: Build NanoPi R1
+      run: sudo vmdb2 nanopi-r1_buster_armhf_vmdb2-0.14.1.yaml --output nanopi-r1_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
+
+    - name: Zero-ing obsolete data blocks
+      run: loopN=$(sudo kpartx -asv nanopi-r1_buster_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv nanopi-r1_buster_armhf.img
+
+    - name: Compress image
+      run: sudo lbzip2 nanopi-r1_buster_armhf.img
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: nanopi-r1_buster_armhf.img.bz2
+        path: nanopi-r1_buster_armhf.img.bz2
+
   buster_arm64:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
