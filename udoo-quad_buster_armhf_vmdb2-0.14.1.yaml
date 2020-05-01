@@ -1,4 +1,4 @@
-# Use like this : sudo vmdb2 cubietruck_buster_armhf_vmdb2-0.14.1.yaml --output cubietruck_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
+# Use like this : sudo vmdb2 udoo-quad_buster_armhf_vmdb2-0.14.1.yaml --output udoo-quad_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
 steps:
   - mkimg: "{{ output }}"
     size: 3G
@@ -44,7 +44,7 @@ steps:
 
   - apt: install
     packages:
-      - linux-image-armmp-lpae
+      - linux-image-armmp
     tag: root
     unless: rootfs_unpacked
 
@@ -64,13 +64,13 @@ steps:
 
   - create-file: /etc/hostname
     contents: |+
-      Cubietruck
+      UdooQuad
 
   - fstab: root
 
   - create-file: /etc/flash-kernel/machine
     contents: |+
-      Cubietech Cubietruck
+      Udoo i.MX6 Quad Board
 
   - chroot: root
     shell: |
@@ -84,12 +84,13 @@ steps:
 
   - apt: install
     packages:
-      - u-boot-sunxi
+      - u-boot-imx
     tag: root 
 
   - root-fs: root
     shell: |
-      dd conv=fsync,notrunc if=$ROOT/usr/lib/u-boot/Cubietruck/u-boot-sunxi-with-spl.bin of={{ output }} bs=1024 seek=8
+      dd conv=fsync,notrunc if=$ROOT/usr/lib/u-boot/udoo/SPL of={{ output }} bs=1K seek=1
+      dd conv=fsync,notrunc if=$ROOT/usr/lib/u-boot/udoo/u-boot.img of={{ output }} bs=1K seek=69
 
   - create-file: /etc/network/interfaces.d/lo
     contents: |+
