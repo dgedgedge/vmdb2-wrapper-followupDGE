@@ -102,6 +102,20 @@ jobs:
         name: odroid-hc1_buster_armhf.img.bz2
         path: odroid-hc1_buster_armhf.img.bz2
 
+    - name: Build Udoo Quad
+      run: sudo vmdb2 udoo-quad_buster_armhf_vmdb2-0.14.1.yaml --output udoo-quad_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
+
+    - name: Zero-ing obsolete data blocks
+      run: loopN=$(sudo kpartx -asv udoo-quad_buster_armhf.img | cut -d\  -f 3); sudo zerofree /dev/mapper/$loopN; sudo kpartx -dsv udoo-quad_buster_armhf.img
+
+    - name: Compress image
+      run: sudo lbzip2 udoo-quad_buster_armhf.img
+
+    - uses: actions/upload-artifact@v1
+      with:
+        name: udoo-quad_buster_armhf.img.bz2
+        path: udoo-quad_buster_armhf.img.bz2
+
   buster_arm64:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
