@@ -1,4 +1,4 @@
-# Use like this : sudo vmdb2 cubietruck-plus_bullseye_armhf_vmdb2-0.14.1.yaml --output cubietruck-plus_bullseye_armhf.img --rootfs-tarball bullseye_armhf_rootfs.tgz --log=stderr
+# Use like this : sudo vmdb2 jetson-tk1_buster_armhf_vmdb2-0.14.1.yaml --output jetson-tk1_buster_armhf.img --rootfs-tarball buster_armhf_rootfs.tgz --log=stderr
 steps:
   - mkimg: "{{ output }}"
     size: 3G
@@ -39,17 +39,12 @@ steps:
 
   - chroot: root
     shell: |
+      echo "deb http://security.debian.org/ buster/updates main contrib non-free" >> /etc/apt/sources.list
+      echo "deb http://ftp.de.debian.org/debian buster-updates main contrib non-free" >> /etc/apt/sources.list
+      echo "deb http://ftp.de.debian.org/debian buster-backports main contrib non-free" >> /etc/apt/sources.list
+      apt-get update
       mv /etc/kernel/postinst.d/initramfs-tools /
-    unless: rootfs_unpacked
-
-  - apt: install
-    packages:
-      - linux-image-armmp-lpae
-    tag: root
-    unless: rootfs_unpacked
-
-  - chroot: root
-    shell: |
+      apt-get install -y -t buster-backports linux-image-armmp-lpae
       mv /initramfs-tools /etc/kernel/postinst.d/
     unless: rootfs_unpacked
 
@@ -64,13 +59,17 @@ steps:
 
   - create-file: /etc/hostname
     contents: |+
-      CubietruckPlus
+      JetsonTK1
 
   - fstab: root
 
   - create-file: /etc/flash-kernel/machine
     contents: |+
-      Cubietech Cubietruck Plus
+      NVIDIA Tegra124 Jetson TK1
+
+  - root-fs: root
+    shell: |
+      mount -o bind /dev/ $ROOT/dev/
 
   - chroot: root
     shell: |
@@ -78,18 +77,19 @@ steps:
 
       sed -i "s_quiet_root=$(grep ^UUID /etc/fstab | cut -d \  -f 1) net.ifnames=0_g" /etc/default/flash-kernel
       update-initramfs -c -k $(ls -l /vmlinuz | sed "s%^.*vmlinuz-\(.*\)$%\1%g")
+      umount /dev/
       rm /etc/flash-kernel/machine
 
       sed -i "s_root:\*:_root::_g" /etc/shadow
 
   - apt: install
     packages:
-      - u-boot-sunxi
+      - u-boot-tegra
     tag: root 
 
-  - root-fs: root
-    shell: |
-      dd conv=fsync,notrunc if=$ROOT/usr/lib/u-boot/Cubietruck_plus/u-boot-sunxi-with-spl.bin of={{ output }} bs=1024 seek=8
+#  - root-fs: root
+#    shell: |
+#      dd conv=fsync,notrunc if=$ROOT/usr/lib/u-boot/jetson-tk1/u-boot-tegra.bin of={{ output }} bs=1024 seek=8
 
   - create-file: /etc/network/interfaces.d/lo
     contents: |+
