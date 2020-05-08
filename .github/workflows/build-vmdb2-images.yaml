@@ -25,6 +25,7 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Install needed packagest
       run: |
+        sudo apt-get update
         sudo apt-get install python3-cliapp cmdtest debootstrap qemu-utils kpartx qemu-user-static binfmt-support zerofree lbzip2
 
     - name: Install vmdb2
@@ -128,6 +129,7 @@ jobs:
     # Runs a set of commands using the runners shell
     - name: Install needed packagest
       run: |
+        sudo apt-get update
         sudo apt-get install python3-cliapp cmdtest debootstrap qemu-utils kpartx qemu-user-static binfmt-support zerofree lbzip2
 
     - name: Install vmdb2
@@ -175,6 +177,7 @@ jobs:
 #    # Runs a set of commands using the runners shell
 #    - name: Install needed packagest
 #      run: |
+#        sudo apt-get update
 #        sudo apt-get install python3-cliapp cmdtest debootstrap qemu-utils kpartx qemu-user-static binfmt-support zerofree lbzip2
 #
 #    - name: Install vmdb2
